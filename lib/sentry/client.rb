@@ -33,16 +33,12 @@ module Sentry
       )
     end
 
-    def upload_sourcemaps(version, sourcemaps)
-      sourcemaps.each do |sourcemap|
-        response = Typhoeus.post(
-          "#{base_url}/#{slug}/releases/#{version}/files/",
-          headers: { "Authorization" => "Bearer #{token}" },
-          body: { file: File.open(sourcemap, "r") }
-        )
-        return false unless response.response_code == 201
-      end
-      true
+    def upload_release_artifact(version, artifact_path)
+      Typhoeus.post(
+        "#{base_url}/#{slug}/releases/#{version}/files/",
+        headers: { "Authorization" => "Bearer #{token}" },
+        body: { file: File.open(artifact_path, "r") }
+      )
     end
   end
 end

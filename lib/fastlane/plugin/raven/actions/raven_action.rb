@@ -16,11 +16,13 @@ module Fastlane
         end
         UI.message("Uploading Sourcemaps")
 
-        if client.upload_sourcemaps(params[:version], params[:sourcemaps])
-          UI.success("Uploaded all Sourcemaps for Version: #{params[:version]}")
-        else
-          UI.user_error!("Failed to upload Sourcemaps for Version: #{params[:version]}")
+        sourcemaps.each do |sourcemap|
+          response = client.upload_release_artifact(params[:version], sourcemap)
+          unless (200..300).cover?(response.response_code)
+            UI.user_error!("Failed to upload Sourcemaps for Version: #{params[:version]}")
+          end
         end
+        UI.success("Uploaded all Sourcemaps for Version: #{params[:version]}")
       end
 
       def self.description
