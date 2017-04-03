@@ -37,7 +37,10 @@ module Sentry
       Typhoeus.post(
         "#{base_url}/#{slug}/releases/#{version}/files/",
         headers: { "Authorization" => "Bearer #{token}" },
-        body: { file: File.open(artifact_path, "r") }
+        body: { 
+          file: File.open(artifact_path, "r"),
+          name: File.basename(artifact_path)
+        }
       )
     end
   end
