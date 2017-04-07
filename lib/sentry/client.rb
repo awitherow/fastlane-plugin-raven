@@ -8,6 +8,7 @@ module Sentry
       self.token = token
       self.slug = slug
       self.base_url = "https://sentry.io/api/0/projects/"
+      self.prefix = "/"
     end
 
     def create_release(version)
@@ -39,9 +40,8 @@ module Sentry
         headers: { "Authorization" => "Bearer #{token}" },
         body: { 
           file: File.open(artifact_path, "r"),
-          name: File.basename(artifact_path)
+          name: "#{prefix}#{File.open(artifact_path}")
         }
-      )
     end
   end
 end
